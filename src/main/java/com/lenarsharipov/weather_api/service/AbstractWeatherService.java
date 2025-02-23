@@ -9,6 +9,10 @@ import com.lenarsharipov.weather_api.settings.Settings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Abstract base class for weather services providing common functionality.
+ * Implements basic operations such as shutdown and data retrieval with caching.
+ */
 public abstract class AbstractWeatherService implements WeatherService {
 
     protected final AtomicBoolean isActive = new AtomicBoolean(true);
@@ -17,6 +21,13 @@ public abstract class AbstractWeatherService implements WeatherService {
     protected final WeatherHttpClient httpClient;
     protected final Cache cache;
 
+    /**
+     * Initializes the weather service with the provided API key, HTTP client, and settings.
+     *
+     * @param apiKey       the API key for the weather service
+     * @param httpClient   the HTTP client for API communication
+     * @param settings     the settings for the service configuration
+     */
     public AbstractWeatherService(String apiKey,
                                   WeatherHttpClient httpClient,
                                   Settings settings) {
@@ -28,12 +39,22 @@ public abstract class AbstractWeatherService implements WeatherService {
                 : settings.dataFreshnessPeriod();
     }
 
+    /**
+     * Shuts down the weather service, clearing the cache and marking it as inactive.
+     */
     @Override
     public void shutdown() {
         this.isActive.set(false);
         this.cache.clear();
     }
 
+    /**
+     * Retrieves weather data for the specified location. Uses cache if data is fresh.
+     *
+     * @param location the location for which to fetch weather data
+     * @return the weather data
+     * @throws HttpException if an error occurs during data retrieval
+     */
     @Override
     public WeatherResponse getWeather(String location) throws HttpException {
         if (!isActive.get()) {
@@ -50,12 +71,11 @@ public abstract class AbstractWeatherService implements WeatherService {
     }
 
     /**
-     * Fetches weather data from the external API for the specified location.
-     * This method must be implemented by concrete subclasses.
+     * Fetches weather data for the specified location from the external source.
      *
-     * @param location the location for which to fetch weather data
+     * @param location the location to fetch weather data for
      * @return the weather data
-     * @throws HttpException if an error occurs while making the request to the external API
+     * @throws HttpException if an error occurs during data retrieval
      */
     protected abstract WeatherResponse fetchWeather(String location) throws HttpException;
 }

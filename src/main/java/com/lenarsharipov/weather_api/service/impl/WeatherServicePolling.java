@@ -13,9 +13,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * WeatherServicePolling provides a scheduled weather data update service.
+ * It periodically fetches weather data for all cached locations using a polling mechanism.
+ */
 public class WeatherServicePolling extends AbstractWeatherService {
 
-    private final static Logger logger = LoggerFactory.getLogger(WeatherServicePolling.class);
+    private static final Logger logger = LoggerFactory.getLogger(WeatherServicePolling.class);
 
     public static final Integer DEFAULT_POLLING_PERIOD = 5;
     public static final Integer DEFAULT_POLLING_INITIAL_DELAY = 0;
@@ -26,6 +30,13 @@ public class WeatherServicePolling extends AbstractWeatherService {
     private final TimeUnit pollingTimeUnit;
     private final ScheduledExecutorService scheduler;
 
+    /**
+     * Constructs a WeatherServicePolling instance with specified API key, HTTP client, and settings.
+     *
+     * @param apiKey the API key for fetching weather data
+     * @param httpClient the HTTP client to use for requests
+     * @param settings the settings for polling behavior
+     */
     public WeatherServicePolling(String apiKey,
                                  WeatherHttpClient httpClient,
                                  Settings settings) {
@@ -45,17 +56,30 @@ public class WeatherServicePolling extends AbstractWeatherService {
         startPolling();
     }
 
+    /**
+     * Shuts down the polling service, stopping all scheduled tasks.
+     */
     @Override
     public void shutdown() {
         super.shutdown();
         scheduler.shutdownNow();
     }
 
+    /**
+     * Fetches weather data for a given location from the external API.
+     *
+     * @param location the location for which to fetch weather data
+     * @return the weather data response
+     * @throws HttpException if an error occurs during the request
+     */
     @Override
     protected WeatherResponse fetchWeather(String location) throws HttpException {
         return httpClient.getWeather(location, apiKey);
     }
 
+    /**
+     * Starts the polling mechanism to periodically update weather data.
+     */
     private void startPolling() {
         scheduler.scheduleAtFixedRate(() -> {
             if (!isActive.get()) return;
@@ -69,6 +93,9 @@ public class WeatherServicePolling extends AbstractWeatherService {
         }, pollingInitialDelay, pollingPeriod, pollingTimeUnit);
     }
 
+    /**
+     * Updates the weather data for all cached locations.
+     */
     private void updateLocationsWeather() {
         Set<String> locations = cache.getLocations();
         for (String location : locations) {
@@ -84,5 +111,4 @@ public class WeatherServicePolling extends AbstractWeatherService {
             }
         }
     }
-
 }
