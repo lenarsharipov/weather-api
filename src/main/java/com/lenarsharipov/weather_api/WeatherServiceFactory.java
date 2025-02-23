@@ -29,18 +29,17 @@ public final class WeatherServiceFactory {
         return getWeatherService(apiKey, apiMode, defaultSettings);
     }
 
-    public static WeatherService getWeatherService(String apiKey, ApiMode apiMode, Settings settings) {
+    public static WeatherService getWeatherService(String apiKey,
+                                                   ApiMode apiMode,
+                                                   Settings settings) {
         if (apiKey == null || apiKey.isBlank() || apiMode == null) {
             throw new IllegalWeatherServiceFactoryArgsException("Passed args cannot be null or empty");
         }
-
         if (services.containsKey(apiKey)) {
             String msg = String.format("There is already a service for apiKey: %s", apiKey);
             throw new ServiceExistsException(msg);
         }
-
         SettingsValidator.validate(settings);
-
         return services.computeIfAbsent(apiKey,
                 key -> apiMode.createWeatherService(key, httpClient, settings));
     }

@@ -15,6 +15,8 @@ import java.net.http.HttpClient;
 import java.util.Collections;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.lenarsharipov.weather_api.util.TestObjectUtils.JSON_WEATHER_RESPONSE;
+import static com.lenarsharipov.weather_api.util.TestObjectUtils.WEATHER_RESPONSE;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -39,91 +41,13 @@ class WeatherHttpClientTest {
     @BeforeEach
     void setUp() {
         wireMockServer.resetAll();
-        weatherHttpClient = new WeatherHttpClient(HttpClient.newHttpClient(), objectMapper, wireMockServer.baseUrl() + "/data/2.5/weather");
+        weatherHttpClient = new WeatherHttpClient(
+                HttpClient.newHttpClient(),
+                objectMapper,
+                wireMockServer.baseUrl() + "/data/2.5/weather");
 
-        this.weatherResponse = WeatherResponse.builder()
-                .coord(new Coord(30.2642, 59.8944))
-                .weather(Collections.singletonList(
-                        new Weather(601, "Snow", "snow", "13n")))
-                .base("stations")
-                .main(Main.builder()
-                        .temp(271.52)
-                        .feelsLike(265.14)
-                        .tempMin(271.23)
-                        .tempMax(271.52)
-                        .pressure(1030)
-                        .humidity(80)
-                        .seaLevel(1030)
-                        .groundLevel(1027)
-                        .build())
-                .visibility(10000)
-                .wind(new Wind(7, 210, 0.0))
-                .snow(new Snow(0.65))
-                .clouds(new Clouds(20))
-                .dt(1740168302)
-                .sys(Sys.builder()
-                        .type(2)
-                        .id(2046422)
-                        .country("RU")
-                        .sunrise(1740115224)
-                        .sunset(1740150304)
-                        .build())
-                .timezone(10800)
-                .id(498817)
-                .name("Saint Petersburg")
-                .cod(200)
-                .build();
-
-        this.jsonResponse = """
-                {
-                    "coord": {
-                        "lon": 30.2642,
-                        "lat": 59.8944
-                    },
-                    "weather": [
-                        {
-                            "id": 601,
-                            "main": "Snow",
-                            "description": "snow",
-                            "icon": "13n"
-                        }
-                    ],
-                    "base": "stations",
-                    "main": {
-                        "temp": 271.52,
-                        "feels_like": 265.14,
-                        "temp_min": 271.23,
-                        "temp_max": 271.52,
-                        "pressure": 1030,
-                        "humidity": 80,
-                        "sea_level": 1030,
-                        "grnd_level": 1027
-                    },
-                    "visibility": 10000,
-                    "wind": {
-                        "speed": 7,
-                        "deg": 210
-                    },
-                    "snow": {
-                        "1h": 0.65
-                    },
-                    "clouds": {
-                        "all": 20
-                    },
-                    "dt": 1740168302,
-                    "sys": {
-                        "type": 2,
-                        "id": 2046422,
-                        "country": "RU",
-                        "sunrise": 1740115224,
-                        "sunset": 1740150304
-                    },
-                    "timezone": 10800,
-                    "id": 498817,
-                    "name": "Saint Petersburg",
-                    "cod": 200
-                }
-                """;
+        this.weatherResponse = WEATHER_RESPONSE;
+        this.jsonResponse = JSON_WEATHER_RESPONSE;
     }
 
     @AfterAll

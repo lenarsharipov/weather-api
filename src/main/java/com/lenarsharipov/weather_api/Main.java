@@ -9,12 +9,7 @@ public class Main {
     public static void main(String[] args) throws HttpException, InterruptedException {
         WeatherService weatherService = WeatherServiceFactory.getWeatherService(
                 "929387b00c7948f6cc6ec6438a95369a",
-                ApiMode.POLLING,
-                new Settings(
-                        10,
-                        Settings.Cache.builder().size(null).build(),
-                        Settings.Polling.builder().build()
-                )
+                ApiMode.ON_DEMAND
         );
 
         System.out.println(weatherService.getWeather("San Francisco"));

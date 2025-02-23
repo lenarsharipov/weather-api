@@ -19,13 +19,12 @@ public class Cache {
     public static final Integer DEFAULT_CACHE_SIZE = 10;
     private final Map<String, WeatherResponse> cache = new ConcurrentHashMap<>();
 
-    private Integer cacheSize;
-
-    public Cache() {
-    }
+    private final Integer cacheSize;
 
     public Cache(Integer cacheSize) {
-        this.cacheSize = cacheSize == null ? DEFAULT_CACHE_SIZE : cacheSize;
+        this.cacheSize = cacheSize == null
+                ? DEFAULT_CACHE_SIZE
+                : cacheSize;
     }
 
     /**
