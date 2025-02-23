@@ -2,8 +2,6 @@ package com.lenarsharipov.weather_api.mode;
 
 import com.lenarsharipov.weather_api.http.WeatherHttpClient;
 import com.lenarsharipov.weather_api.service.WeatherService;
-import com.lenarsharipov.weather_api.service.WeatherServiceOnDemand;
-import com.lenarsharipov.weather_api.service.WeatherServicePolling;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

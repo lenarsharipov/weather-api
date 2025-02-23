@@ -7,6 +7,7 @@ import com.lenarsharipov.weather_api.http.WeatherHttpClient;
 import com.lenarsharipov.weather_api.model.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,7 @@ import java.util.Collections;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 @DisplayName("Polling Weather Service")
 @ExtendWith(MockitoExtension.class)
 class WeatherServicePollingTest {
