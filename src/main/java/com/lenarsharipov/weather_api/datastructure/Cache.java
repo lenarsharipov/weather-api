@@ -16,11 +16,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Cache {
 
-    private final Map<String, WeatherResponse> cache;
-    private static final int DEFAULT_CACHE_SIZE = 10;
+    public static final Integer DEFAULT_CACHE_SIZE = 10;
+    private final Map<String, WeatherResponse> cache = new ConcurrentHashMap<>();
 
-    public Cache() {
-        this.cache = new ConcurrentHashMap<>();
+    private final Integer cacheSize;
+
+    public Cache(Integer cacheSize) {
+        this.cacheSize = cacheSize == null
+                ? DEFAULT_CACHE_SIZE
+                : cacheSize;
     }
 
     /**
@@ -99,6 +103,6 @@ public class Cache {
      * @return true if the cache is full, false otherwise
      */
     private boolean isCacheFull() {
-        return cache.size() >= DEFAULT_CACHE_SIZE;
+        return cache.size() >= cacheSize;
     }
 }

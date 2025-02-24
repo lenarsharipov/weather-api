@@ -20,6 +20,8 @@ import java.time.Instant;
  */
 public interface WeatherService extends Stoppable {
 
+    Integer DEFAULT_DATA_FRESHNESS_PERIOD = 10;
+
     /**
      * Retrieves weather data for the specified location.
      * If the data is already in the cache and is fresh, it is returned from the cache.
@@ -32,15 +34,14 @@ public interface WeatherService extends Stoppable {
      */
     WeatherResponse getWeather(String location) throws HttpException;
 
-
     /**
      * Checks if the provided weather data is fresh (i.e., was received in the last 10 minutes).
      *
      * @param dt the time when the weather data was received
      * @return true if the data is fresh, false otherwise
      */
-    default boolean isDataFresh(long dt) {
+    default boolean isDataFresh(long dt, long period) {
         Instant dataTime = Instant.ofEpochSecond(dt);
-        return Duration.between(dataTime, Instant.now()).toMinutes() < 10;
+        return Duration.between(dataTime, Instant.now()).toMinutes() < period;
     }
 }

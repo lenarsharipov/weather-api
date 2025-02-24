@@ -1,19 +1,17 @@
 package com.lenarsharipov.weather_api.datastructure;
 
-import com.lenarsharipov.weather_api.model.Clouds;
-import com.lenarsharipov.weather_api.model.Coord;
-import com.lenarsharipov.weather_api.model.Sys;
 import com.lenarsharipov.weather_api.model.WeatherResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import static com.lenarsharipov.weather_api.util.TestObjectUtils.LOCATION;
+import static com.lenarsharipov.weather_api.util.TestObjectUtils.createWeatherResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -24,35 +22,12 @@ class CacheTest {
     private Cache cache;
     private WeatherResponse response1;
     private WeatherResponse response2;
-    private static final String location = "Saint Petersburg";
 
     @BeforeEach
     void setUp() {
-        this.cache = new Cache();
+        this.cache = new Cache(Cache.DEFAULT_CACHE_SIZE);
         this.response1 = createWeatherResponse(1740143220);
         this.response2 = createWeatherResponse(1740146111);
-    }
-
-    private WeatherResponse createWeatherResponse(long dt) {
-        return WeatherResponse.builder()
-                .coord(new Coord(30.2642, 59.8944))
-                .base("stations")
-                .weather(Collections.emptyList())
-                .visibility(10000)
-                .clouds(new Clouds(0))
-                .dt(dt)
-                .sys(Sys.builder()
-                        .type(2)
-                        .id(2046422)
-                        .country("RU")
-                        .sunrise(1740115224)
-                        .sunset(1740150304)
-                        .build())
-                .timezone(10800)
-                .id(498817)
-                .name(location)
-                .cod(200)
-                .build();
     }
 
     @Nested
@@ -74,10 +49,10 @@ class CacheTest {
         @Test
         @DisplayName("puts and gets a value")
         void shouldPutAndGetWeatherResponse() {
-            cache.put(location, response1);
+            cache.put(LOCATION, response1);
 
             assertAll(
-                    () -> assertThat(cache.get(location)).isEqualTo(response1),
+                    () -> assertThat(cache.get(LOCATION)).isEqualTo(response1),
                     () -> assertThat(cache.size()).isOne()
             );
         }

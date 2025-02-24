@@ -14,6 +14,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
 public class WeatherHttpClient {
+
     private static final String ACCEPT_HEADER = "Accept";
     private static final String APPLICATION_JSON = "application/json";
 
@@ -21,7 +22,9 @@ public class WeatherHttpClient {
     private final ObjectMapper objectMapper;
     private final String apiUrl;
 
-    public WeatherHttpClient(HttpClient httpClient, ObjectMapper objectMapper, String apiUrl) {
+    public WeatherHttpClient(HttpClient httpClient,
+                             ObjectMapper objectMapper,
+                             String apiUrl) {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
         this.apiUrl = apiUrl;
@@ -35,7 +38,8 @@ public class WeatherHttpClient {
      * @return the weather response
      * @throws HttpException if an error occurs during the request or response parsing
      */
-    public WeatherResponse getWeather(String location, String apiKey) throws HttpException {
+    public WeatherResponse getWeather(String location,
+                                      String apiKey) throws HttpException {
         HttpRequest request = buildGetRequest(location, apiKey);
         HttpResponse<String> response = sendRequest(request);
         return parseResponse(response);
